@@ -1,5 +1,6 @@
 import ImageUtilities.image_io
 import ImageUtilities.resize
+import ImageUtilities.color_operations
 import unittest
 import os
 
@@ -43,11 +44,19 @@ class ImageUtilitiesUT(unittest.TestCase):
         # close the buffer
         image.close()
 
-    # def tearDown(self):
-    #     for i in [1,2,3,4 ]:
-    #         os.remove(
-    #             os.path.join(os.getcwd(), "test", "test_resize{n}.jpg".format(n = str(i)))
-    #             )
+    def test_color_to_grayscale(self):
+        image = ImageUtilities.image_io.open_image(self.image_path)
+        matrix = ImageUtilities.image_io.as_matrix(image)
+        output_path = os.path.join(os.getcwd(), "test", "test_grayscale.jpg")
+        gray = ImageUtilities.color_operations.to_grayscale(
+            matrix, [0.25, 0.5, 0.25])
+        new_image = ImageUtilities.image_io.as_image(gray)
+        ImageUtilities.image_io.write_image(new_image, output_path)
+
+    def tearDown(self):
+        test_path = os.path.join(os.getcwd(), "test")
+        map(lambda x: os.remove(os.path.join(test_path, i)),
+            [i for i in os.listdir(test_path) if i.endswith(".jpg")])
 
 
 if __name__ == '__main__':
