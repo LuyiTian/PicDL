@@ -4,6 +4,7 @@ import multiprocessing
 from skimage import transform
 import cv2
 from whale_localizer import find_whale
+import mxnet as mx
 
 
 def prep_train_list(train_csv, out_path):
