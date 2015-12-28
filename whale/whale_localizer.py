@@ -49,7 +49,7 @@ def simHist(im, baseHist, label=""):
 
     for i in range(0,len(sim)):
         #This is the threshold to consider too different 
-        if sim[i] < 0.25:
+        if sim[i] < 0.35:
             setImage( images[i], 255 )
         else:
             sim.append( simHist( images[i], histg, label+str(i) ) )
@@ -88,7 +88,7 @@ def find_whale(path_to_image):
     org = im
     #show("Orginial", org)
 
-    print("Processing")
+    #print("Processing")
     im = cv2.cvtColor(im,cv2.COLOR_BGR2HSV)
     baseHist = get_hist(im)
     kernel = np.ones((40,40),np.uint8)
@@ -102,7 +102,7 @@ def find_whale(path_to_image):
     ret3,thresh = cv2.threshold(blur,0,255,cv2.THRESH_BINARY_INV+cv2.THRESH_OTSU)
     # show("Masking", thresh)
     # pdb.set_trace()
-    _,contours,hierarchy = cv2.findContours(thresh,cv2.RETR_EXTERNAL,cv2.CHAIN_APPROX_SIMPLE)
+    contours,hierarchy = cv2.findContours(thresh,cv2.RETR_EXTERNAL,cv2.CHAIN_APPROX_SIMPLE)
     cv2.drawContours(im,contours,-1,(255,255,255),3)
     # show("Contours", im)
     # print(contours)
@@ -122,9 +122,9 @@ def find_whale(path_to_image):
         bx,by,bw,bh = cv2.boundingRect(best)
         extract = org[ by:(by+bh), bx:(bx+bw) ]
         mask = im[ by:(by+bh), bx:(bx+bw) ]
-
         #save extract and mask
-        cv2.imwrite(path_to_image+".output.extract.jpg",extract)
+        #cv2.imwrite(path_to_image+".output.extract.jpg", extract)
+        return extract
         # cv2.imwrite(path_to_image+".output.mask.jpg",mask)
 
         #show findings
@@ -138,7 +138,7 @@ def find_whale(path_to_image):
         # show("areas",org)
 
         # cv2.imwrite(path_to_image+".output.mask-areas.jpg",im)
-        cv2.imwrite(path_to_image+".output.areas.jpg",org)
+        #cv2.imwrite(path_to_image+".output.areas.jpg",org)
     else:
         print("Failed")
 
