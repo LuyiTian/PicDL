@@ -94,10 +94,10 @@ if __name__ == '__main__':
         train_dir = "/Users/luyi/Dropbox/noaa_kaggle/data/train"
         nct = 8
     elif config == "luyi_cloud":
-        raw_data_dir = "~/raw_data/imgs"
-        train_csv = "~/PicDL/resource/train.csv"
+        raw_data_dir = "/home/tlytiger/raw_data/imgs"
+        train_csv = "/home/tlytiger/PicDL/resource/train.csv"
         #submit_csv = "/Users/luyi/Dropbox/noaa_kaggle/data/sample_submission.csv"
-        train_dir = "~/train_data"
+        train_dir = "/home/tlytiger/train_data"
         nct = 2
     img_list = os.path.join(train_dir, "whale_train.lst")
     train_dict = prep_train_list(train_csv, img_list)
