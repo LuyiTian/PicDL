@@ -30,19 +30,6 @@ def prep_train_list(train_csv, out_path):
     return out_dict
 
 
-def rotate(image, angle, center = None, scale = 1.0):
-    (h, w) = image.shape[:2]
-
-    if center is None:
-        center = (w / 2, h / 2)
-
-    # Perform the rotation
-    M = cv2.getRotationMatrix2D(center, angle, scale)
-    rotated = cv2.warpAffine(image, M, (w, h))
-
-    return rotated
-
-
 def prep_train_img(img_dir, img_name, output_dir, resize_shape):
     '''
     prepare trainning data
