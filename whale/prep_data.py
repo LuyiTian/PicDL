@@ -90,7 +90,7 @@ if __name__ == '__main__':
         nct = 2
     img_list = os.path.join(train_dir, "whale_train.lst")
     train_dict = prep_train_list(train_csv, img_list)
-    resize_shape = (300, 600)
+    resize_shape = (224,224)
     pool = multiprocessing.Pool(processes=nct)
     for key in train_dict:
         #print key
