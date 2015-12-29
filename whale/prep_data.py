@@ -1,6 +1,7 @@
 #prepare dataset
 import os
 import multiprocessing
+import collections
 from skimage import transform
 import cv2
 import numpy as np
@@ -29,6 +30,24 @@ def prep_train_list(train_csv, out_path):
         ind += 1
     f.close()
     return out_dict
+
+
+def sub_train_list(train_csv, sub_out, top_n = 10):
+    '''
+    extract top_n most common whales, write to sub_out
+    '''
+    out_f = open(sub_out, 'w')
+    out_f.write("Image,whaleID\n")
+    with open(train_csv) as fin:
+        all_line = fin.readlines()
+        whale_id = [line.strip().split(',')[1] for line in all_line][1:] # [1:] remove header
+        whale_img = [line.strip().split(',')[0] for line in all_line][1:]
+    whale_cnt = collections.Counter(whale_id)  
+    top_id = [it for it, _ in whale_cnt.most_common(top_n)]
+    print len(whale_id), len(whale_img)
+    for ind, _id in enumerate(whale_id):
+        if _id in top_id:
+            out_f.write("{},{}\n".format(whale_img[ind], _id))
 
 
 def prep_train_img(img_dir, img_name, output_dir, resize_shape):
@@ -78,7 +97,8 @@ if __name__ == '__main__':
     config = sys.argv[1]
     if config == "luyi_mbp":
         raw_data_dir = "/Users/luyi/Dropbox/noaa_kaggle/data/imgs"
-        train_csv = "/Users/luyi/git/PicDL/resource/sub_train.csv"
+        train_csv = "/Users/luyi/git/PicDL/resource/train.csv"
+        sub_train_csv = "/Users/luyi/git/PicDL/resource/sub_train.csv"
         submit_csv = "/Users/luyi/Dropbox/noaa_kaggle/data/sample_submission.csv"
         train_dir = "/Users/luyi/Dropbox/noaa_kaggle/data/train"
         nct = 8
@@ -88,10 +108,10 @@ if __name__ == '__main__':
         #submit_csv = "/Users/luyi/Dropbox/noaa_kaggle/data/sample_submission.csv"
         train_dir = "/home/tlytiger/train_data"
         nct = 2
+    sub_train_list(train_csv, sub_train_csv)
     img_list = os.path.join(train_dir, "whale_train.lst")
-    train_dict = prep_train_list(train_csv, img_list)
+    train_dict = prep_train_list(sub_train_csv, img_list)
     resize_shape = (224,224)
-    '''
     pool = multiprocessing.Pool(processes=nct)
     for key in train_dict:
         #print key
@@ -99,5 +119,4 @@ if __name__ == '__main__':
         pool.apply_async(prep_train_img, (raw_data_dir, key, train_dir, resize_shape))
     pool.close()
     pool.join()
-    '''
     prep_mxnet_data(train_dir, img_list)
