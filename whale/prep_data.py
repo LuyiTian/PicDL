@@ -78,7 +78,7 @@ if __name__ == '__main__':
     config = sys.argv[1]
     if config == "luyi_mbp":
         raw_data_dir = "/Users/luyi/Dropbox/noaa_kaggle/data/imgs"
-        train_csv = "/Users/luyi/Dropbox/noaa_kaggle/data/train.csv"
+        train_csv = "/Users/luyi/git/PicDL/resource/sub_train.csv"
         submit_csv = "/Users/luyi/Dropbox/noaa_kaggle/data/sample_submission.csv"
         train_dir = "/Users/luyi/Dropbox/noaa_kaggle/data/train"
         nct = 8
