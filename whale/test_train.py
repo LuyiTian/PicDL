@@ -48,7 +48,7 @@ net = importlib.import_module('symbol_' + args.network).get_symbol(args.num_clas
 
 # data
 def get_iterator(args, kv):
-    data_shape = (3, 300, 600)
+    data_shape = (3,224,224)
     train = mx.io.ImageRecordIter(
         path_imgrec = args.data_dir + "whale_train.rec",
         mean_r      = 123.68,

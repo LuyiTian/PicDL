@@ -3,6 +3,7 @@ import os
 import multiprocessing
 from skimage import transform
 import cv2
+import numpy as np
 from whale_localizer import find_whale
 import mxnet as mx
 
@@ -63,7 +64,6 @@ def prep_mxnet_data(train_dir, img_list):
             line = [i.strip() for i in line.strip().split('\t')]
             item = [int(line[0])] + [line[-1]] + [float(i) for i in line[1:-1]]
             header = mx.recordio.IRHeader(0, item[2], item[0], 0)
-            print os.path.join(train_dir, item[1])
             img = cv2.imread(os.path.join(train_dir, item[1]))
             s = mx.recordio.pack_img(header, img, quality=80, img_fmt=".jpg")
             record.write(s)
@@ -91,6 +91,7 @@ if __name__ == '__main__':
     img_list = os.path.join(train_dir, "whale_train.lst")
     train_dict = prep_train_list(train_csv, img_list)
     resize_shape = (224,224)
+    '''
     pool = multiprocessing.Pool(processes=nct)
     for key in train_dict:
         #print key
@@ -98,4 +99,5 @@ if __name__ == '__main__':
         pool.apply_async(prep_train_img, (raw_data_dir, key, train_dir, resize_shape))
     pool.close()
     pool.join()
+    '''
     prep_mxnet_data(train_dir, img_list)
